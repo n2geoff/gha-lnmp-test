@@ -1,2 +1,2 @@
-# testgha
-learning github actions
+# Test GHA
+learning Github actions
