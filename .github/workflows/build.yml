@@ -1,0 +1,33 @@
+name: Build Image
+
+on:
+  push:
+    branches:
+        - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: n2geoff
+          password: ${{ secrets.GH_TOKEN }}
+
+
+      - name: Build and Push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/gha-lnmp-test:${{ github.ref_name }}
+          context: .
+          file: docker/Dockerfile
+          build-args: |
+            GH_TOKEN=${{ secrets.GH_TOKEN }}
+
